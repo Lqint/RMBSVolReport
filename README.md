@@ -1,7 +1,7 @@
 # RMBSVolReport
 Provide a simple and easy-to-use solution for generationg an annual report for your volunteer organization.
 
-# 2025 商院青协年度报告系统
+# 2025 人大商院青协年度报告系统
 
 ## 项目概述
 

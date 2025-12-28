@@ -1,0 +1,15 @@
+/* Base layout */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 禁止原生滚动 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    background-color: #F4F1EA;
+    /* 增加一个径向渐变，模拟老照片的暗角 */
+    background-image: radial-gradient(circle at center, #fffcf5 0%, #eaddcf 100%);
+}

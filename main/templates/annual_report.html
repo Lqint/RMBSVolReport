@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2025 RMBS 志愿时光档案</title>
+
+    <!-- 样式库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- 自定义样式 (模块化) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles/main.css') }}">
+
+    <!-- 脚本库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+
+<div class="texture-bg"></div>
+<div class="dust-container">
+    <div class="dust" style="width:4px; height:4px; left:10%; animation-duration: 8s;"></div>
+    <div class="dust" style="width:6px; height:6px; left:30%; animation-duration: 12s; animation-delay: 2s;"></div>
+    <div class="dust" style="width:3px; height:3px; left:60%; animation-duration: 10s; animation-delay: 4s;"></div>
+    <div class="dust" style="width:5px; height:5px; left:80%; animation-duration: 14s; animation-delay: 1s;"></div>
+</div>
+
+<div class="swiper swiper-v">
+    <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+            <div class="bg-floating-layer">
+                <div class="float-photo fp-1"><img src="{{ url_for('serve_image', filename='summercamp-1.jpg') }}"></div>
+                <div class="float-photo fp-2"><img src="{{ url_for('serve_image', filename='dandelion.jpg') }}"></div>
+                <div class="float-photo fp-3"><img src="{{ url_for('serve_image', filename='guizhou_online.jpg') }}"></div>
+                <div class="float-photo fp-4"><img src="{{ url_for('serve_image', filename='spring_event.jpg') }}"></div>
+                <div class="float-photo fp-5"><img src="{{ url_for('serve_image', filename='“守护折翼天使”.jpg') }}"></div>
+                <div class="float-photo fp-6"><img src="{{ url_for('serve_image', filename='recycle-1.jpg') }}"></div>
+            </div>
+            <div class="paper-card ani" data-ani="animate__fadeIn">
+                <div style="text-align: center;">
+                    <div style="border-top:2px solid var(--ruc-red); border-bottom:2px solid var(--ruc-red); display:inline-block; padding:5px 20px; color:var(--ruc-red); letter-spacing:2px; margin-bottom:20px;">
+                        2025 商院青协
+                    </div>
+                    <h1 style="font-size:3.2rem; color:#2B2B2B; margin:0; line-height:1.2;">志愿<br>档案</h1>
+                    <p style="margin-top:20px; color:#666; font-family:'KaiTi';">记录每一次温暖的传递</p>
+                </div>
+            </div>
+            <div style="position: absolute; bottom: 40px; opacity: 0.6; animation: fadeInUp 2s infinite; z-index: 10;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#A61C26"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+            </div>
+        </div>
+
+
+    <!-- === 升级版 Slide：点亮微光游戏 === -->
+    <div class="swiper-slide game-bg-level-0" id="game-slide">
+
+        <div style="position:absolute; top:8%; width:100%; text-align:center; z-index:10;" class="ani" data-ani="animate__fadeInDown">
+            <h2 class="game-text-title">点亮微光</h2>
+            <p class="game-text-sub">点击灰暗图标，收集四季温暖</p>
+        </div>
+
+        <!-- 主容器 -->
+        <div class="game-container ani" data-ani="animate__zoomIn">
+
+            <!-- 顶部进度 -->
+            <div class="neon-progress-bar">
+                <div class="neon-fill" id="progress-fill"></div>
+                <div class="neon-text">已收集 <span id="collect-count">0</span>/4</div>
+            </div>
+
+            <!-- 地图区域 -->
+            <div class="map-grid">
+
+                <!-- 1. 支教 (红) -->
+                <div class="map-cell" onclick="openGameModal(0, this)">
+                    <div class="icon-wrapper theme-red" id="icon-0">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 6l-3.75 5 2.85.38-1.75 4.95L19 9.5l-4.44-.33L16.2 6zM5 3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7H5V5h7V3H5z"/></svg>
+                        <div class="glow-ring"></div>
+                    </div>
+                    <div class="cell-label">筑梦山海</div>
+                </div>
+
+                <!-- 2. 关怀 (橙) -->
+                <div class="map-cell" onclick="openGameModal(1, this)">
+                    <div class="icon-wrapper theme-orange" id="icon-1">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <div class="glow-ring"></div>
+                    </div>
+                    <div class="cell-label">社区暖阳</div>
+                </div>
+
+                <!-- 3. 环保 (绿) -->
+                <div class="map-cell" onclick="openGameModal(2, this)">
+                    <div class="icon-wrapper theme-green" id="icon-2">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/></svg>
+                        <div class="glow-ring"></div>
+                    </div>
+                    <div class="cell-label">绿色校园</div>
+                </div>
+
+                <!-- 4. 心之旅 (蓝) -->
+                <div class="map-cell" onclick="openGameModal(3, this)">
+                    <div class="icon-wrapper theme-blue" id="icon-3">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12,7V3H2V21H22V7H12M6,19H4V5H6V19M18,19H8V9H18V19M18,7H8V5H18V7M16,11H10V13H16V11M16,15H10V17H16V15Z"/></svg>
+                        <div class="glow-ring"></div>
+                    </div>
+                    <div class="cell-label">心语之旅</div>
+                </div>
+
+            </div>
+
+            <div id="game-success-msg">✨ 微光成炬，感谢有你 ✨</div>
+        </div>
+
+            <!-- 荣誉卡片 -->
+        <div id="game-modal" class="game-modal-overlay" onclick="closeGameModal()">
+            <div class="collect-card" onclick="event.stopPropagation()">
+
+                <!-- 轮播图结构 -->
+                <div class="card-hero">
+                    <div class="swiper swiper-game">
+                        <div class="swiper-wrapper" id="gm-swiper-wrapper">
+                            <!-- JS 动态插入 slide -->
+                        </div>
+                        <!-- 分页器 (小圆点) -->
+                        <div class="swiper-pagination"></div>
+                    </div>
+
+                    <!-- 标签浮在轮播图之上 -->
+                    <div class="card-tag" id="gm-tag">支教</div>
+                </div>
+
+                <!-- 内容区 -->
+                <div class="card-body">
+                    <h3 id="gm-title">标题</h3>
+                    <div class="card-divider"></div>
+                    <p id="gm-desc">描述内容...</p>
+                    <div class="card-data-row">
+                        <div class="card-stat">
+                            <div class="val" id="gm-stat-val">0</div>
+                            <div class="lbl" id="gm-stat-label">Label</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 按钮 -->
+                <button class="card-btn" id="gm-btn" onclick="closeGameModal()">点亮图标</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="swiper-slide">
+        <div class="paper-card ani" data-ani="animate__fadeInUp">
+            <h3 style="text-align:center; color:#555; font-weight:normal; margin-bottom:30px;">档案调阅</h3>
+            <input type="text" id="input-name" class="input-line" placeholder="姓名 / Name">
+            <input type="tel" id="input-phone" class="input-line" placeholder="学号 / StuID">
+
+            <div id="error-box" class="error-msg" style="text-align:center; color:#A61C26; font-size:0.9rem; margin-bottom:10px; display:none;"></div>
+
+            <div class="btn-seal-wrapper" onclick="fetchData()">
+                <div class="btn-seal">
+                    <div class="btn-text">开启<br>回忆</div>
+                </div>
+                <div class="seal-ink">已调阅</div>
+            </div>
+        </div>
+        <div id="loading" style="display:none; margin-top:15px; text-align:center; color:var(--ruc-red); font-size:0.9rem;">正在检索云端数据...</div>
+    </div>
+
+        <!-- 动态页面插入处 -->
+    </div>
+</div>
+
+<div id="data-explanation-modal" onclick="closeDataExplanation()">
+    <!-- 点击遮罩关闭 -->
+
+    <div class="paper-card" onclick="event.stopPropagation()" style="width: 85%; max-width: 320px; padding: 30px 25px; text-align: center;">
+        <h3 style="color:var(--ruc-red); margin-bottom:20px; font-weight:bold;">关于数据的说明</h3>
+
+        <div style="font-size: 0.9rem; color: #555; text-align: justify; line-height: 1.8; margin-bottom: 25px;">
+            <p style="margin-bottom:10px;">1. 本报告展示的数据仅基于<strong>商学院青年志愿者协会</strong>记录在册的<strong>院级活动</strong>志愿服务时长。</p>
+            <p style="margin-bottom:10px;">2. 校级志愿服务、社团活动或其他学院组织的活动时长，并未纳入统计。完整志愿数据时数数据请在志愿北京上查询。</p>
+            <p>3. 如您发现院级数据有误，或有其他建议，欢迎反馈。</p>
+        </div>
+
+        <!-- 问卷星链接 -->
+        <a href="https://v.wjx.cn/vm/tUWdFfd.aspx" target="_blank" class="img-choice-btn" style="display:block; text-decoration:none; margin-bottom:12px; line-height: 20px;">
+            📝 填写反馈问卷
+        </a>
+
+        <button class="img-choice-btn secondary" onclick="closeDataExplanation()" style="width:100%;">
+            我已了解
+        </button>
+    </div>
+</div>
+
+
+<!-- 中文简约版海报 -->
+<div id="poster-modal" style="display:none;">
+    <div class="poster-backdrop" onclick="closePosterModal()"></div>
+
+    <div class="poster-wrapper">
+        <!-- 海报卡片主体 -->
+        <div id="poster-card">
+
+            <!-- 1. 顶部 -->
+            <div class="poster-header-new">
+                <div class="poster-title-cn">志愿时光档案</div>
+                <div class="poster-year-cn">2025</div>
+            </div>
+
+            <!-- 2. 图片区域 (点击换图) -->
+            <div class="poster-img-box" onclick="openImgChoice()">
+                <!-- 标签显示区 -->
+                <div id="p-tag-display" class="poster-tag-label">年度记忆</div>
+
+                <!-- 背景图容器 -->
+                <div id="p-img-bg" class="poster-img-bg"></div>
+
+                <!-- 隐藏文件控件 -->
+                <input type="file" id="image-upload-input" accept="image/*" onchange="handleImageUpload(this)">
+            </div>
+
+            <!-- 3. 数据区域 -->
+            <div class="poster-data-row">
+                <div class="poster-user-line">
+                    志愿者：<span id="p-name" style="color:#000; font-weight:900; font-size:1.3rem;">--</span>
+                </div>
+
+                <!-- 寄语 -->
+                <div id="p-desc" class="poster-desc-line"></div>
+
+                <div class="poster-divider"></div>
+
+                <div class="poster-stat-grid">
+                    <div class="stat-group">
+                        <div class="stat-num-cn" id="p-data1">0</div>
+                        <div class="stat-label-cn" id="p-label1">--</div>
+                    </div>
+                    <div class="stat-group">
+                        <div class="stat-num-cn" id="p-data2">--</div>
+                        <div class="stat-label-cn" id="p-label2">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 底部二维码 -->
+            <div class="poster-footer-new">
+                <div class="footer-left">
+                    <div class="footer-slogan">商院青协 · 感恩有你</div>
+                    <div class="footer-sub">长按扫码，获取专属报告</div>
+                </div>
+                <!-- 二维码 -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://report.rmbsvol.icu/annual_report" class="footer-qr" crossorigin="anonymous">
+            </div>
+        </div>
+
+        <!-- 底部操作栏 -->
+        <div class="poster-actions">
+            <div class="action-tip">点击图片可更换照片</div>
+            <button class="btn-save-img" onclick="savePosterImage()">
+                <span style="font-size:1.2rem; vertical-align:middle;">📥</span> 保存图片
+            </button>
+            <button class="btn-close-modal" onclick="closePosterModal()">关闭</button>
+        </div>
+    </div>
+
+    <!-- 选图器：从时光掠影选择 / 上传 -->
+<div id="img-choice-overlay" class="img-choice-overlay" style="display:none;">
+  <div class="img-choice-backdrop" onclick="closeImgChoice()"></div>
+  <div class="img-choice-panel" onclick="event.stopPropagation()">
+    <div class="img-choice-title">选择证书封面</div>
+    <div class="img-choice-actions">
+      <button class="img-choice-btn" id="btn-pick-from-gallery" onclick="openPhotoPicker()">
+        从时光掠影选择
+      </button>
+      <button class="img-choice-btn secondary" onclick="triggerUpload()">
+        自己上传照片
+      </button>
+    </div>
+    <div class="img-choice-tip">提示：选好照片后可继续保存证书</div>
+  </div>
+</div>
+
+    <!-- 时光掠影图片选择器 -->
+    <div id="photo-picker-overlay" class="photo-picker-overlay" style="display:none;">
+      <div class="photo-picker-backdrop" onclick="closePhotoPicker()"></div>
+      <div class="photo-picker-panel" onclick="event.stopPropagation()">
+        <div class="photo-picker-header">
+          <div class="photo-picker-title">从时光掠影选择</div>
+          <button class="photo-picker-close" onclick="closePhotoPicker()">×</button>
+        </div>
+        <div id="photo-picker-grid" class="photo-picker-grid">
+          <!-- JS 动态插入缩略图 -->
+        </div>
+      </div>
+    </div>
+
+
+</div>
+
+<!-- 最终生成的图片展示 -->
+<div id="final-result-overlay">
+    <div class="final-img-container">
+        <div class="final-close" onclick="closeFinalOverlay()">×</div>
+        <img id="final-image" alt="Generated Poster">
+    </div>
+
+    <div class="final-tips">
+        <div style="font-size: 0.85rem; opacity: 0.7; animation: pulse 2s infinite;">
+            长按上方图片即可保存到相册
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 海报弹窗 -->
+<div id="poster-overlay">
+    <button class="close-btn" onclick="closePoster()">×</button>
+    <img id="final-image" alt="长按保存">
+    <div style="color:white; margin-top:15px; letter-spacing:1px; animation: pulse 2s infinite;">长按图片保存到相册</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+    window.API_URL = "{{ url_for('get_annual_data') }}";
+</script>
+
+<script type="module" src="{{ url_for('static', filename='js/src/index.js') }}"></script>
+
+</body>
+</html>

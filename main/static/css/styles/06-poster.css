@@ -1,0 +1,422 @@
+/* === 5. 海报生成专用 === */
+
+/* 1. 弹窗容器 */
+#poster-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poster-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.poster-wrapper {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.95); /* 微调缩放 */
+    transform-origin: center center;
+}
+
+/* 2. 海报卡片主体 */
+/* 修改 #poster-card 样式 */
+#poster-card {
+    width: 320px;
+    height: 600px;
+    background: #FDFBF7; /* 必须要有明确背景色 */
+
+    /* 必须加 hidden，否则圆角外的图片部分在截图时会变成黑色/杂色 */
+    overflow: hidden;
+    border-radius: 16px;
+
+    /* 边框保持不变 */
+    border-top: 12px solid #A61C26;
+    border-bottom: 12px solid #A61C26;
+
+    /* 这里的 shadow 只在预览时生效，生成图片时已被 JS 移除 */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+
+    /* 新增：强制字体抗锯齿，防止截图文字模糊 */
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 建议新增：图片容器防止溢出 */
+.poster-img-bg {
+    /* ...原有样式... */
+    /* 增加这一行，防止图片比容器大导致截图出现溢出 */
+    background-origin: content-box;
+}
+
+/* --- 内部布局调整 --- */
+
+/* 顶部标题栏 */
+.poster-header-new {
+    /* 减少下方 padding，让图片往上提一点 */
+    padding: 25px 20px 5px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-shrink: 0; /* 防止被压缩 */
+}
+.poster-title-cn {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 1px;
+}
+.poster-year-cn {
+    font-size: 1.1rem;
+    color: #A61C26;
+    font-weight: 900;
+}
+
+/* 图片容器 */
+/* --- 图片容器 (优化：稍微调小高度) --- */
+.poster-img-box {
+    width: 280px;
+    height: 210px; /* 修改：从 230px 减小到 210px，给下方文字腾位置 */
+    margin: 15px auto 15px auto; /* 上下间距微调 */
+    background: #eee;
+    border-radius: 8px; /* 修改：圆角稍微加大 */
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.poster-img-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.5s;
+    border-radius: 8px;
+}
+.poster-img-box:hover .poster-img-bg {
+    transform: scale(1.05);
+}
+
+/* 图片标签 */
+.poster-tag-label {
+    position: absolute;
+    top: 10px;
+    left: -4px;
+    z-index: 5;
+    background: #A61C26;
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+/* 相机图标 */
+.edit-hint-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+}
+#image-upload-input { display: none; }
+
+/* 数据区域 (Flex 1 自动撑满中间) */
+.poster-data-row {
+    padding: 0 24px; /* 修改：左右内边距稍微加大，文字不贴边 */
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* 志愿者姓名 */
+.poster-user-line {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+/* 寄语 */
+.poster-desc-line {
+    font-size: 0.95rem; /* 稍微加大字号 */
+    color: #555;
+    line-height: 1.6; /* 增加行高，提升可读性 */
+    font-family: "KaiTi", "STKaiti", serif;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+    text-align: center;
+    /* 限制最大高度，防止文字过多撑破布局 (可选) */
+    max-height: 80px;
+    overflow: hidden;
+}
+
+/* 分隔线 */
+.poster-divider {
+    width: 30px;
+    height: 2px;
+    background: #ddd;
+    margin: 0 auto 12px auto;
+}
+
+/* 统计数据网格 (自动填补剩余垂直空间并居中) */
+.poster-stat-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* 修改：拉大两个数据之间的距离 */
+    margin-top: auto;
+    padding-bottom: 15px; /* 修改：增加底部留白，不紧贴 Footer */
+    border-top: 1px dashed #e0e0e0; /* 可选：增加一条虚线分割，增加层次感 */
+    padding-top: 15px;
+}
+
+.stat-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.stat-num-cn {
+    font-family: 'Impact', sans-serif;
+    font-size: 2.0rem; /* 修改：从 2.2 调至 2.0，避免过于突兀 */
+    color: #A61C26;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.stat-label-cn {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 4px;
+}
+
+/* 底部二维码区域 */
+.poster-footer-new {
+    background: #F4F1EA;
+    padding: 10px 20px; /* 稍微减小高度 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+.footer-left { text-align: left; }
+.footer-slogan {
+    font-size: 0.85rem;
+    color: #A61C26;
+    font-weight: bold;
+}
+.footer-sub {
+    font-size: 0.65rem;
+    color: #999;
+    margin-top: 2px;
+}
+.footer-qr {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #fff;
+}
+
+/* 操作栏 */
+.poster-actions {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+.action-tip {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+.btn-save-img {
+    background: #A61C26;
+    color: white; border: none;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(166, 28, 38, 0.4);
+    cursor: pointer;
+    margin-right: 15px;
+    transition: transform 0.2s;
+}
+.btn-save-img:active { transform: scale(0.95); }
+
+.btn-close-modal {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #eee;
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* 结果覆盖层 */
+#final-result-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#final-image {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+
+/* === 优化部分：保存图片加载与结果展示 === */
+
+/* 1. 按钮加载状态样式 */
+.btn-loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+    padding-left: 40px !important; /* 给 spinner 留位置 */
+}
+/* 纯 CSS 旋转加载圈 */
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    margin-top: -9px; /* 半径 */
+    width: 18px;
+    height: 18px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.8s linear infinite;
+}
+
+
+/* 2. 结果展示层优化 (解决移动端适配与动画) */
+#final-result-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.92); /* 背景更深，突出图片 */
+    z-index: 3000;
+
+    /* Flex 布局保证居中 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* 初始隐藏状态（通过 opacity 控制渐变） */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+/* 激活显示状态 */
+#final-result-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 图片容器：限制最大宽高，防止溢出屏幕 */
+.final-img-container {
+    width: 85%;
+    max-width: 380px; /* 限制平板上的过大宽度 */
+    max-height: 80vh; /* 留出空间给底部文字 */
+    position: relative;
+
+    /* 初始缩放动画状态 */
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹性动效 */
+}
+
+#final-result-overlay.show .final-img-container {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+#final-image {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    display: block;
+}
+
+/* 提示文字和关闭按钮优化 */
+.final-tips {
+    margin-top: 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    animation: fadeInUp 0.6s ease 0.2s backwards;
+}
+
+.final-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1.5rem;
+
+    /* 弹性布局保持不变 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.3);
+
+}
+
+
+/* Scroll hint at the bottom */
+.scroll-hint {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #aaa;
+    animation: pulse 2s infinite;
+}
+
+
+/* ... (前文代码) ... */

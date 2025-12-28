@@ -1,0 +1,203 @@
+/* === 新增：能力分析页样式 (替代雷达图) === */
+
+/* 1. 核心聚焦区 */
+.focus-area {
+    text-align: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+
+.focus-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--ruc-red);
+    letter-spacing: 2px;
+}
+
+.focus-score {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2px;
+    font-family: 'Impact', sans-serif;
+}
+
+
+/* 2. 能量条列表 */
+.skill-list {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.skill-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    opacity: 0; /* 初始隐藏，用于JS控制进场动画 */
+    animation: slideInRight 0.5s forwards;
+}
+
+.skill-name {
+    width: 70px;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: right;
+    margin-right: 12px;
+    flex-shrink: 0;
+    font-family: "KaiTi", serif;
+}
+
+.skill-track {
+    flex: 1;
+    height: 10px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff9a9e 0%, var(--ruc-red) 100%);
+    width: 0; /* 初始宽度为0，JS控制动画 */
+    border-radius: 5px;
+    transition: width 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+    position: relative;
+}
+
+/* 增加一个小光点在进度条头部 */
+.skill-fill::after {
+    content: '';
+    position: absolute; right: 0; top: 0;
+    width: 10px; height: 100%;
+    background: rgba(255,255,255,0.4);
+    filter: blur(2px);
+}
+
+.skill-val {
+    width: 30px;
+    font-size: 0.75rem;
+    color: #999;
+    margin-left: 8px;
+    text-align: left;
+    font-family: 'Arial', sans-serif;
+}
+
+
+/* === 混合风格：复古印章 + 现代列表 === */
+
+/* --- Part A: 复古印章 (The Retro Stamp) --- */
+.stamp-area {
+    text-align: center;
+    margin: 10px 0 25px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stamp-box {
+    width: 100px; height: 100px;
+    /* 朱红双实线边框 */
+    border: 3px double #b53f3f;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    /* 盖章动画 */
+    animation: stamp-fall 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    /* 模拟印泥纹理 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+    background-color: rgba(181, 63, 63, 0.02);
+    color: #b53f3f;
+    box-shadow: inset 0 0 15px rgba(181, 63, 63, 0.15);
+}
+
+.stamp-inner {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transform: rotate(-3deg); /* 微微倾斜 */
+}
+
+.stamp-text {
+    font-family: "KaiTi", "STKaiti", serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 2px;
+    letter-spacing: 2px;
+    border-top: 1px solid #b53f3f;
+    padding-top: 2px;
+}
+
+.stamp-caption {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #b53f3f;
+    opacity: 0.8;
+    font-family: "KaiTi", serif;
+    letter-spacing: 1px;
+}
+
+
+/* --- Part B: 现代能量条 (The Modern Bars) --- */
+.skill-list {
+    width: 100%;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+
+.skill-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* 间距拉开一点更清爽 */
+    opacity: 0;
+    animation: slideInRight 0.5s forwards;
+}
+
+.skill-name {
+    width: 65px;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: right;
+    margin-right: 12px;
+    flex-shrink: 0;
+    /* 回归现代字体，或者保留楷体增加一点书卷气，这里用默认字体更清晰 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.skill-track {
+    flex: 1;
+    height: 8px; /* 细一点更精致 */
+    background: rgba(0,0,0,0.06);
+    border-radius: 10px; /* 圆角 */
+    overflow: hidden;
+    position: relative;
+}
+
+.skill-fill {
+    height: 100%;
+    /* 现代渐变色：从粉红到主色红 */
+    background: linear-gradient(90deg, #ff9a9e 0%, var(--ruc-red) 100%);
+    width: 0;
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+    position: relative;
+}
+
+/* 进度条末端的高光点 */
+.skill-fill::after {
+    content: '';
+    position: absolute; right: 0; top: 0;
+    width: 8px; height: 100%;
+    background: rgba(255,255,255,0.5);
+    filter: blur(2px);
+    border-radius: 50%;
+}
+
+.skill-val {
+    width: 30px;
+    font-size: 0.8rem;
+    color: #999;
+    margin-left: 10px;
+    text-align: left;
+    font-family: 'Arial', sans-serif;
+}

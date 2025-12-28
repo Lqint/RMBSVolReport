@@ -1,0 +1,278 @@
+/* === 证书封面：选择方式 overlay === */
+.img-choice-overlay,
+.photo-picker-overlay{
+    position: fixed; inset: 0;
+    z-index: 4000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.img-choice-backdrop,
+.photo-picker-backdrop{
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+}
+
+.img-choice-panel{
+    position: relative;
+    width: 92%;
+    max-width: 420px;
+    margin-bottom: 18px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.img-choice-title{
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #333;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.img-choice-actions{
+    display: flex;
+    gap: 10px;
+}
+
+.img-choice-btn{
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 10px;
+    font-weight: 800;
+    cursor: pointer;
+    background: var(--ruc-red);
+    color: #fff;
+}
+
+.img-choice-btn.secondary{
+    background: rgba(166, 28, 38, 0.08);
+    color: var(--ruc-red);
+    border: 1px solid rgba(166, 28, 38, 0.25);
+}
+
+.img-choice-tip{
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+}
+
+/* === 时光掠影选图器 === */
+.photo-picker-panel{
+    position: relative;
+    width: 94%;
+    max-width: 520px;
+    height: 70vh;
+    margin-bottom: 18px;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-picker-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 14px 10px 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.photo-picker-title{
+    font-weight: 900;
+    color: #333;
+    font-size: 1.05rem;
+}
+
+.photo-picker-close{
+    border: none;
+    background: transparent;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #999;
+}
+
+.photo-picker-grid{
+    padding: 12px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.photo-thumb{
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f2f2f2;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    cursor: pointer;
+}
+
+.photo-thumb img{
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-thumb .photo-thumb-title{
+    position: absolute;
+    left: 6px; right: 6px; bottom: 6px;
+    font-size: 0.75rem;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+    background: rgba(0,0,0,0.35);
+    padding: 3px 6px;
+    border-radius: 8px;
+    line-height: 1.2;
+}
+
+
+/* === 新增：数据疑问相关样式 === */
+
+/* 1. 触发链接样式 */
+.data-doubt-link {
+    font-size: 0.75rem;
+    color: #999;
+    text-decoration: underline;
+    text-underline-offset: 4px; /* 下划线稍微离远一点 */
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.data-doubt-link:hover {
+    color: var(--ruc-red);
+    background: rgba(166, 28, 38, 0.05);
+    border-radius: 4px;
+}
+
+/* 2. 弹窗容器 (参考 poster-modal，但更简化) */
+#data-explanation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6000; /* 保证在最上层 */
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+
+    /* 弹性居中 */
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* === 新增：称号交互与解释弹窗 === */
+
+/* 1. 标签交互增强 */
+.tag-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.tag-item:active {
+    transform: scale(0.95);
+    background: rgba(166, 28, 38, 0.1);
+}
+/* 增加一个小问号提示可点击 (可选) */
+.tag-item::after {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 0.7rem;
+    color: rgba(166, 28, 38, 0.5);
+    vertical-align: top;
+}
+
+/* 2. 称号解释弹窗 */
+#tag-explain-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 5000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#tag-explain-modal.show {
+    opacity: 1;
+}
+
+.tag-explain-card {
+    width: 80%; max-width: 300px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid var(--ruc-red);
+    position: relative;
+    overflow: hidden;
+}
+
+#tag-explain-modal.show .tag-explain-card {
+    transform: scale(1);
+}
+
+/* 装饰背景字 */
+.tag-explain-bg {
+    position: absolute; top: -10px; right: -10px;
+    font-size: 5rem; color: rgba(166, 28, 38, 0.05);
+    font-weight: bold; font-family: 'Impact';
+    pointer-events: none;
+    z-index: 0;
+}
+
+.tag-explain-title {
+    font-size: 1.4rem; color: var(--ruc-red);
+    font-weight: bold; margin-bottom: 15px;
+    position: relative; z-index: 1;
+    letter-spacing: 2px;
+}
+
+.tag-explain-content {
+    font-size: 1rem; color: #555;
+    line-height: 1.6;
+    font-family: "KaiTi", serif;
+    position: relative; z-index: 1;
+    margin-bottom: 20px;
+}
+
+.tag-explain-btn {
+    background: var(--ruc-red); color: #fff;
+    border: none; padding: 8px 25px;
+    border-radius: 20px; font-size: 0.9rem;
+    cursor: pointer;
+}
+/* 点击提示小字 */
+.click-hint-text {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 8px;       /* 紧跟在标签下方 */
+    margin-bottom: 25px;   /* 与下方感谢语拉开距离 */
+    text-align: center;
+    font-family: "KaiTi", serif;
+    opacity: 0.8;
+    /* 加一个呼吸动画，吸引注意力 */
+    animation: pulse-hint 2s infinite ease-in-out;
+}

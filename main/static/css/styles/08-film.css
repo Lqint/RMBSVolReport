@@ -1,0 +1,85 @@
+/* === style.css 更新部分 === */
+
+/* 1. 独家记忆-滚动容器 (替代原有的 flex 布局) */
+.film-container {
+    position: relative;
+    width: 86%;            /* 宽度适中 */
+    height: 68vh;          /* 固定高度，占据屏幕主要区域 */
+    margin: 85px auto 0;   /* 顶部留出标题空间 */
+    padding: 10px 10px 80px 35px; /* 左侧留出时间轴线的空间，底部留白 */
+
+    /* 核心：允许垂直滚动 */
+    overflow-y: auto;
+
+    /* 交互优化：防止滚动穿透与原生回弹 */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+
+    /* 视觉：左侧虚线轴 */
+    border-left: 2px dashed #8D6E63;
+    box-sizing: border-box;
+}
+
+/* 隐藏滚动条但保留功能 (美观) */
+.film-container::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* 2. 单个记忆卡片样式优化 */
+.film-item {
+    position: relative;
+    margin-bottom: 25px;   /* 卡片间距 */
+    background: #fff;      /* 改为浅色背景，更像日记 */
+    color: #333;
+    padding: 15px 15px 15px 20px;
+    border-radius: 8px;
+
+    /* 增加纸张质感阴影 */
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid rgba(141, 110, 99, 0.2); /* 淡淡的边框 */
+
+    /* 确保初始状态 */
+    opacity: 0;
+    animation-fill-mode: forwards; /* 保持动画结束状态 */
+}
+
+/* 3. 时间轴上的圆点 */
+.film-dot {
+    position: absolute;
+    left: -42px; /* 调整圆点位置对齐虚线 */
+    top: 20px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #A61C26; /* 主题红 */
+    border: 3px solid #F4F1EA; /* 外圈同背景色，制造间隔感 */
+    box-shadow: 0 0 0 1px #A61C26;
+    z-index: 2;
+}
+
+/* 4. 卡片内的时间日期 */
+.film-date {
+    display: inline-block;
+    background: rgba(166, 28, 38, 0.1);
+    color: #A61C26;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* 5. 标题与内容 */
+.film-title {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #2B2B2B;
+    margin-bottom: 6px;
+}
+.film-content {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    text-align: justify; /* 两端对齐更整齐 */
+}
